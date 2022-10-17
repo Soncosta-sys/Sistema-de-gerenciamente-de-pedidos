@@ -25,9 +25,15 @@ export function isAuthenticated(
         token,
         process.env.JWT_SECRET
         ) as Payload; 
+
+        // Recuperar id do token
+        req.user_id = sub;
+
+        return next();
+
      } catch (err) {
         return res.status(401).end();
      }
 
-     return next();
+    
 }
