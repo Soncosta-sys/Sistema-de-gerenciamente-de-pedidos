@@ -3,8 +3,36 @@ import styles from '../../../styles/home.module.scss'
 import { Button } from '../../components/ui/Button'
 import Input from '../../components/ui/Input'
 import Link from 'next/link'
+import { FormEvent, useContext, useState } from 'react'
 
-export default function Home() {
+import { AuthContext } from '../../contexts/AuthContext'
+import { toast } from 'react-toastify'
+
+export default function SignUp() {
+  const { signUp} = useContext(AuthContext);
+  
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  async function handleSignUp(event: FormEvent){
+    event.preventDefault();
+
+    if(name === '' || email === '' || password === ''){
+      toast.error("Preencha todos campos")
+      return;
+    }
+
+    let data = {
+      name,
+      email,
+      password
+    }
+
+    await signUp(data)
+
+  }
+
   return (
     <>
     <Head>
@@ -16,21 +44,27 @@ export default function Home() {
 
       <div className={styles.login}>
         <h1>Criando sua conta</h1>
-        <form>
-
+        
+        <form onSubmit={handleSignUp}>
           <Input
           placeholder='Digite seu nome completo'
           type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           />
 
           <Input 
           placeholder='Digite seu email'
           type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           />
 
           <Input
           placeholder='Sua senha'
           type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           />
 
           <Button 
@@ -39,7 +73,7 @@ export default function Home() {
           >
             Cadastrar
           </Button>
-          </form>
+        </form>
 
           <Link href='/'>
            <a className={styles.text}>Já possui uma conta? Faça login!</a>

@@ -1,5 +1,6 @@
 import axios, { AxiosError} from "axios";
 import { parseCookies } from "nookies";
+import { signOut } from "../contexts/AuthContext";
 import { AuthTokenError } from "./errors/AuthTokenError";
 
 export function setupAPIClient(ctx = undefined){
@@ -19,6 +20,7 @@ export function setupAPIClient(ctx = undefined){
             // Deslogar usuário caso não esteja autorizado
             if(typeof window !== undefined){
                 // Chama a função para deslogar o usuário
+                signOut();
             } else {
                 return Promise.reject(new AuthTokenError())
             }
